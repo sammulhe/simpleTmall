@@ -1,9 +1,14 @@
 package servlet;
 
+import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
 
 import dao.CategoryDao;
 import pojo.Category;
@@ -36,12 +41,13 @@ public class CategoryServlet extends BaseBackServlet{
 	}
 	
 	public String update(HttpServletRequest request, HttpServletResponse response,Page page){
-		int id = Integer.parseInt(request.getParameter("id"));
-		String name = request.getParameter("name");
+		Map<String,String> params = new HashMap<>();
+		FileItem item = this.parseUpload(request, response, params);
 		
 		Category category = new Category();
-		category.setId(id);
-		category.setName(name);
+		category.setId(Integer.parseInt(params.get("id")));
+		category.setName(params.get("name"));
+		saveAsPhoto(request,item,Integer.parseInt(params.get("id")));
 		categoryDao.update(category);
 		
 		return "@admin_category_list";
@@ -63,5 +69,22 @@ public class CategoryServlet extends BaseBackServlet{
 		categoryDao.add(category);
 		
 		return "@admin_category_list";
+	}
+	
+	
+	public void saveAsPhoto(HttpServletRequest request, FileItem item, int categoryId){
+		String photoFolder =request.getServletContext().getRealPath("/img/category") + "new";
+		String filename = categoryId + ".jpg";
+		
+		System.out.println("ooo" + photoFolder + "   " + filename);
+		File file = new File(photoFolder,filename);
+		file.getParentFile().mkdirs();
+		
+		try {
+			item.write(file);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
