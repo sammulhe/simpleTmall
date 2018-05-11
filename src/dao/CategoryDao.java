@@ -20,6 +20,7 @@ public class CategoryDao {
     	List<Category> categorys = new ArrayList<>(); //必须初始化，不然是空指针
     	String sql = "select * from category limit ?,?";     //获取	
 
+    	
 		try {
 			Connection connection = DBUtil.getConnection(); //必须是静态才能这样，不然要进行初始化
 			PreparedStatement s = connection.prepareStatement(sql);
