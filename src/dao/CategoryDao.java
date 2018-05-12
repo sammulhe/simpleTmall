@@ -148,8 +148,13 @@ public class CategoryDao {
     	try {
 			Connection connection = DBUtil.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setString(1, category.getName());			
+			ps.setString(1, category.getName());	
 			ps.execute();
+			ResultSet rs = ps.getGeneratedKeys();
+			
+			while(rs.next()){
+				category.setId(rs.getInt(1));
+			}
 			
 			connection.close();
 		} catch (SQLException e) {

@@ -33,8 +33,8 @@ $(function(){
 <div class="workingArea">
 		<ol class="breadcrumb">
 		  <li><a href="admin_category_list">所有分类</a></li>
-		  <li><a href="admin_product_list?cid=${p.category.id}">${p.category.name}</a></li>
-		  <li class="active">${p.name}</li>
+		  <li><a href="admin_product_list?cid=${product.category.id}">${product.category.name}</a></li>
+		  <li class="active">${product.name}</li>
 		  <li class="active">产品图片管理</li>
 		</ol>
 
@@ -58,7 +58,7 @@ $(function(){
 					    			<tr class="submitTR">
 					    				<td align="center">
 					    					<input type="hidden" name="type" value="type_single" />
-					    					<input type="hidden" name="pid" value="${p.id}" />
+					    					<input type="hidden" name="pid" value="${product.id}" />
 					    					<button type="submit" class="btn btn-success">提 交</button>
 					    				</td>
 					    			</tr>
@@ -75,7 +75,7 @@ $(function(){
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${pisSingle}" var="pi">
+						<c:forEach items="${productSingleImages}" var="pi">
 							<tr>
 								<td>${pi.id}</td>
 								<td>
@@ -111,7 +111,7 @@ $(function(){
 					    			<tr class="submitTR">
 					    				<td align="center">
 					    					<input type="hidden" name="type" value="type_detail" />
-					    					<input type="hidden" name="pid" value="${p.id}" />
+					    					<input type="hidden" name="pid" value="${product.id}" />
 					    					<button type="submit" class="btn btn-success">提 交</button>
 					    				</td>
 					    			</tr>
@@ -128,7 +128,7 @@ $(function(){
 							</tr>
 						</thead>
 						<tbody>
-							<c:forEach items="${pisDetail}" var="pi">
+							<c:forEach items="${productDetailImages}" var="pi">
 								<tr>
 									<td>${pi.id}</td>
 									<td>

@@ -62,18 +62,20 @@ public class CategoryServlet extends BaseBackServlet{
 	}
 	
 	public String add(HttpServletRequest request, HttpServletResponse response,Page page){
-		String name = request.getParameter("name");
+		Map<String,String> params = new HashMap<>();
+		FileItem item = this.parseUpload(request, response, params);
 	
 		Category category = new Category();
-		category.setName(name);
-		categoryDao.add(category);
+		category.setName(params.get("name"));
+		categoryDao.add(category);		
+		saveAsPhoto(request,item,category.getId());  //通过加入数据库返回了id
 		
 		return "@admin_category_list";
 	}
 	
 	
 	public void saveAsPhoto(HttpServletRequest request, FileItem item, int categoryId){
-		String photoFolder =request.getServletContext().getRealPath("/img/category") + "new";
+		String photoFolder =request.getServletContext().getRealPath("/img/category");
 		String filename = categoryId + ".jpg";
 		
 		System.out.println("ooo" + photoFolder + "   " + filename);

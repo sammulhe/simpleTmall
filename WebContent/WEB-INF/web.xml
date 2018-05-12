@@ -35,6 +35,18 @@
         <url-pattern>/productServlet</url-pattern>
     </servlet-mapping>
     
+    <!--处理ProductImage相关的servlet-->
+    <servlet>
+        <servlet-name>ProductImageServlet</servlet-name>
+        <servlet-class>servlet.ProductImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ProductImageServlet</servlet-name>
+        <url-pattern>/productImageServlet</url-pattern>
+    </servlet-mapping>
+    
+    
+    
     <!--处理User相关的servlet-->
     <servlet>
         <servlet-name>UserServlet</servlet-name>
