@@ -8,7 +8,7 @@
 <script>
  
 $(function(){
-    var stock = ${p.stock};
+   /* var stock =  10;
     $(".productNumberSetting").keyup(function(){
         var num= $(".productNumberSetting").val();
         num = parseInt(num);
@@ -70,11 +70,11 @@ $(function(){
                 }
         );      
         return false;
-    });
+    });*/
     $(".buyLink").click(function(){
-        var page = "forecheckLogin";
-        $.get(
-                page,
+        var page1 = "forecheckLogin";
+        $.post(
+                page1,
                 function(result){
                     if("success"==result){
                         var num = $(".productNumberSetting").val();
@@ -99,9 +99,9 @@ $(function(){
         }
          
         var page = "foreloginAjax";
-        $.get(
+        $.post(
                 page,
-                {"name":name,"password":password},
+                {"username":name,"password":password},
                 function(result){
                     if("success"==result){
                         location.reload();
@@ -141,9 +141,9 @@ $(function(){
 <div class="imgAndInfo">
  
     <div class="imgInimgAndInfo">
-        <img src="img/productSingle/${p.firstProductImage.id}.jpg" class="bigImg">
+        <img src="img/productSingle/${product.firstProductImage.id}.jpg" class="bigImg">
         <div class="smallImageDiv">
-            <c:forEach items="${p.productSingleImages}" var="pi">
+            <c:forEach items="${product.productSingleImages}" var="pi">
                 <img src="img/productSingle_small/${pi.id}.jpg" bigImageURL="img/productSingle/${pi.id}.jpg" class="smallImage">
             </c:forEach>
         </div>
@@ -153,10 +153,10 @@ $(function(){
     <div class="infoInimgAndInfo">
          
         <div class="productTitle">
-            ${p.name}
+            ${product.name}
         </div>
         <div class="productSubTitle">
-            ${p.subTitle} 
+            ${product.subTitle} 
         </div>
          
         <div class="productPrice">
@@ -174,21 +174,21 @@ $(function(){
                     <span class="originalPriceYuan">¥</span>
                     <span class="originalPrice">
                      
-                        <fmt:formatNumber type="number" value="${p.orignalPrice}" minFractionDigits="2"/>                 
+                        <fmt:formatNumber type="number" value="${product.originalPrice}" minFractionDigits="2"/>                 
                     </span>
                 </div>
                 <div class="promotionDiv">
                     <span class="promotionPriceDesc">促销价 </span>
                     <span class="promotionPriceYuan">¥</span>
                     <span class="promotionPrice">
-                        <fmt:formatNumber type="number" value="${p.promotePrice}" minFractionDigits="2"/>
+                        <fmt:formatNumber type="number" value="${product.promotePrice}" minFractionDigits="2"/>
                     </span>               
                 </div>
             </div>
         </div>
         <div class="productSaleAndReviewNumber">
-            <div>销量 <span class="redColor boldWord"> ${p.saleCount }</span></div>   
-            <div>累计评价 <span class="redColor boldWord"> ${p.reviewCount}</span></div>    
+            <div>销量 <span class="redColor boldWord"> ${product.saleCount }</span></div>   
+            <div>累计评价 <span class="redColor boldWord"> ${prodcut.reviewCount}</span></div>    
         </div>
         <div class="productNumber">
             <span>数量</span>
@@ -213,7 +213,7 @@ $(function(){
                 </span>
                      
             件</span>
-            <span>库存${p.stock}件</span>
+            <span>库存${product.stock}件</span>
         </div>
         <div class="serviceCommitment">
             <span class="serviceCommitmentDesc">服务承诺</span>
@@ -226,11 +226,12 @@ $(function(){
         </div>    
          
         <div class="buyDiv">
-            <a class="buyLink" href="forebuyone?pid=${p.id}"><button class="buyButton">立即购买</button></a>
+            <a class="buyLink" href="forebuyone?pid=${product.id}"><button class="buyButton">立即购买</button></a>
             <a href="#nowhere" class="addCartLink"><button class="addCartButton"><span class="glyphicon glyphicon-shopping-cart"></span>加入购物车</button></a>
         </div>
     </div>
      
     <div style="clear:both"></div>
-     
+    
+    <%@include file="../modal.jsp"%>    
 </div>

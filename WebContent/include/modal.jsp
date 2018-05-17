@@ -36,7 +36,7 @@
 							<a href="register.jsp" class="pull-right">免费注册</a> 
 						</div>
 						<div style="margin-top:20px">
-							<button class="btn btn-block redButton loginSubmitButton" type="submit">登录</button>
+							<button id = "loginSubmitButton" class="btn btn-block redButton loginSubmitButton" type="submit">登录</button>
 						</div>
 					</div>	
 	      </div>

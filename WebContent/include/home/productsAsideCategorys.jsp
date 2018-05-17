@@ -24,9 +24,9 @@ $(function(){
 });
 
 </script>
-<c:forEach items="${cs}" var="c">
+<c:forEach items="${categorys}" var="c" varStatus="st">
 	<div cid="${c.id}" class="productsAsideCategorys">
-	 
+	  
 		<c:forEach items="${c.productsByRow}" var="ps">
 			<div class="row show1">
 				<c:forEach items="${ps}" var="p">
@@ -42,7 +42,7 @@ $(function(){
 				</c:forEach>
 				<div class="seperator"></div>
 			</div>		
-		</c:forEach>
+		</c:forEach> 		
 	</div>			
 </c:forEach>
 	

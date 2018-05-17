@@ -75,10 +75,11 @@ public class CategoryServlet extends BaseBackServlet{
 	
 	
 	public void saveAsPhoto(HttpServletRequest request, FileItem item, int categoryId){
-		String photoFolder =request.getServletContext().getRealPath("/img/category");
+		//String photoFolder = request.getServletContext().getRealPath("/img/category");  因为项目已部署到tomcat，会把文件保存到tomcat下，而不是在项目中
+		//为了在eclipse方便开发，直接存在项目中，之后发布到服务器还是要改会上面的语句，保存到服务器端
+		String photoFolder = "D:\\workspace\\simple_tmall\\WebContent\\img\\category";
 		String filename = categoryId + ".jpg";
 		
-		System.out.println("ooo" + photoFolder + "   " + filename);
 		File file = new File(photoFolder,filename);
 		file.getParentFile().mkdirs();
 		

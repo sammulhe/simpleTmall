@@ -16,7 +16,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 	
 <div class="searchProducts">
 	
-	<c:forEach items="${ps}" var="p">
+	<c:forEach items="${products}" var="p">
 		<div class="productUnit" price="${p.promotePrice}">
 			<a href="foreproduct?pid=${p.id}">
 				<img class="productImage" src="img/productSingle/${p.firstProductImage.id}.jpg">
@@ -36,7 +36,7 @@
 			
 		</div>
 	</c:forEach>
-	<c:if test="${empty ps}">
+	<c:if test="${empty products}">
 		<div class="noMatch">没有满足条件的产品<div>
 	</c:if>
 	

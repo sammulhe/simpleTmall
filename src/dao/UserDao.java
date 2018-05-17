@@ -14,6 +14,13 @@ import util.DBUtil;
 //User相关的操作
 public class UserDao {
 	
+	
+	public List<User> list(){
+		int total = this.getTotal();
+		List<User> users = list(0,total);
+		return users;
+	}
+	
 	//分页查询
 	public List<User> list(int start, int count){
 		List<User> users = new ArrayList<>();
@@ -61,5 +68,53 @@ public class UserDao {
 		}
 		
 		return total;
+	}
+	
+	
+	public void add(User user){
+		String sql = "insert into user (username,password) values (?,?)";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, user.getUsername());
+			ps.setString(2, user.getPassword());
+			ps.execute();
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	//用于用户登录，检查账号密码是否正确
+	public User find(String username, String password){
+		User user = null;
+		String sql = "select * from user where username = ?";
+		
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				if(rs.getString(3).equals(password)){
+					user = new User();
+					user.setId(rs.getInt(1));
+					user.setUsername(rs.getString(2));
+					user.setPassword(rs.getString(3));
+					return user;
+				}
+			}
+			
+			connection.close();			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return user;
 	}
 }

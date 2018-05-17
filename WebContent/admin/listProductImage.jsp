@@ -57,7 +57,7 @@ $(function(){
 					    			</tr>
 					    			<tr class="submitTR">
 					    				<td align="center">
-					    					<input type="hidden" name="type" value="type_single" />
+					    					<input type="hidden" name="type" value="Single" />
 					    					<input type="hidden" name="pid" value="${product.id}" />
 					    					<button type="submit" class="btn btn-success">提 交</button>
 					    				</td>
@@ -110,7 +110,7 @@ $(function(){
 					    			</tr>
 					    			<tr class="submitTR">
 					    				<td align="center">
-					    					<input type="hidden" name="type" value="type_detail" />
+					    					<input type="hidden" name="type" value="Detail" />
 					    					<input type="hidden" name="pid" value="${product.id}" />
 					    					<button type="submit" class="btn btn-success">提 交</button>
 					    				</td>

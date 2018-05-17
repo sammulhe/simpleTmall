@@ -58,7 +58,7 @@ $(function(){
 				<span class="loginInputIcon ">
 					<span class=" glyphicon glyphicon-user"></span>
 				</span>
-				<input id="name" name="name" placeholder="手机/会员名/邮箱" type="text">			
+				<input id="name" name="username" placeholder="手机/会员名/邮箱" type="text">			
 			</div>
 			
 			<div class="loginInput " >

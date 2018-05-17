@@ -4,7 +4,8 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt"  prefix='fmt' %> 
 	
 <div class="productReviewDiv" >
 	<div class="productReviewTopPart">
@@ -23,10 +24,11 @@
 				</div>
 				<div class="productReviewItemDate"><fmt:formatDate value="${r.createDate}" pattern="yyyy-MM-dd"/></div>
 			</div>
+			<%-- 
 			<div class="productReviewItemUserInfo">
 			
 				${r.user.anonymousName}<span class="userInfoGrayPart">（匿名）</span>
-			</div>
+			</div>--%>
 			
 			<div style="clear:both"></div>
 		

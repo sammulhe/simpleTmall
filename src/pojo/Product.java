@@ -1,5 +1,7 @@
 package pojo;
 
+import java.util.List;
+
 public class Product {
 	private int id;
 	private String name;
@@ -10,6 +12,13 @@ public class Product {
 	private String createDate;
 	private int cid;
 	private Category category;
+	
+	private List<ProductImage> productSingleImages; //一个产品有多张单个图片
+	private List<ProductImage> productDetailImages; //详情图片
+	private ProductImage firstProductImage;  //第一张图片
+	
+	private int saleCount = 0;
+	private int reviewCount = 0;
 	
 	public int getId(){
 		return this.id;
@@ -73,4 +82,40 @@ public class Product {
 	public void setCategory(Category category){
 		this.category = category;
 	}
+	
+	
+	public List<ProductImage> getProductSingleImages(){
+		return this.productSingleImages;
+	}
+	public void setProductSingleImages(List<ProductImage> productSingleImages){
+		this.productSingleImages = productSingleImages;
+	}
+	
+	public List<ProductImage> getProductDetailImages(){
+		return this.productDetailImages;
+	}
+	public void setProductDetailImages(List<ProductImage> productDetailImages){
+		this.productDetailImages = productDetailImages;
+	}
+	
+	public ProductImage getFirstProductImage(){	
+		if(!productSingleImages.isEmpty()){
+			firstProductImage = this.productSingleImages.get(0);
+		}
+	    return firstProductImage;
+
+	}
+	public int getSaleCount() {
+		return saleCount;
+	}
+	public void setSaleCount(int saleCount) {
+		this.saleCount = saleCount;
+	}
+	public int getReviewCount() {
+		return reviewCount;
+	}
+	public void setReviewCount(int reviewCount) {
+		this.reviewCount = reviewCount;
+	}
+	
 }

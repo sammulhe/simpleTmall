@@ -4,6 +4,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>	
 <div class="buyPageDiv">
   <form action="forecreateOrder" method="post">
   
@@ -72,7 +73,7 @@
 				</tr>
 			</thead>
 			<tbody class="productListTableTbody">
-				<c:forEach items="${ois}" var="oi" varStatus="st" >
+				<c:forEach items="${orderItems}" var="oi" varStatus="st" >
 					<tr class="orderItemTR">
 						<td class="orderItemFirstTD"><img class="orderItemImg" src="img/productSingle_middle/${oi.product.firstProductImage.id}.jpg"></td>
 						<td class="orderItemProductInfo">
@@ -86,8 +87,7 @@
 							<img src="img/site/promise.png" title="消费者保障服务,承诺如实描述">
 						
 						</td>
-						<td>
-						
+						<td>					
 						<span class="orderItemProductPrice">￥<fmt:formatNumber type="number" value="${oi.product.promotePrice}" minFractionDigits="2"/></span>
 						</td>
 						<td>

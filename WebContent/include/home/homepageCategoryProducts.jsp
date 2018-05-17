@@ -15,8 +15,10 @@
 
 <%--fn标签提供各种实用功能，首先使用之前使用加入如下指令 --%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %> 
+
+<!--主题的17种分类以及每种分类对应的5个产品 -->
 <c:if test="${empty param.categorycount}">
-	<c:set var="categorycount" scope="page" value="100"/>
+	<c:set var="categorycount" scope="page" value="10"/>   <!--页面最下面显示多少个分类-->
 </c:if>
 
 <c:if test="${!empty param.categorycount}">
@@ -24,7 +26,7 @@
 </c:if>
 
 <div class="homepageCategoryProducts">
-	<c:forEach items="${cs}" var="c" varStatus="stc">
+	<c:forEach items="${categorys}" var="c" varStatus="stc">
 		<c:if test="${stc.count<=categorycount}">
 			<div class="eachHomepageCategoryProducts">
 				<div class="left-mark"></div>
@@ -33,7 +35,8 @@
 				<c:forEach items="${c.products}" var="p" varStatus="st">
 					<c:if test="${st.count<=5}">
 						<div class="productItem" >
-							<a href="foreproduct?pid=${p.id}"><img width="100px" src="img/productSingle_middle/${p.firstProductImage.id}.jpg"></a>
+							<!-- <a href="foreproduct?pid=${p.id}"><img width="100px" src="img/productSingle_middle/${p.firstProductImage.id}.jpg"></a> -->
+							<a href="foreproduct?pid=${p.id}"><img width="100px" src="img/productSingle/${p.firstProductImage.id}.jpg"></a>			
 							<a class="productItemDescLink" href="foreproduct?pid=${p.id}">
 								<span class="productItemDesc">[热销]
 								${fn:substring(p.name, 0, 20)}

@@ -4,7 +4,7 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <script>
 function showProductsAsideCategorys(cid){
@@ -72,13 +72,13 @@ $(function(){
 		<span style="margin-left:10px" >商品分类</span>
 		
 	</div>
-	
+	<!-- 显示在天猫国际旁边的五个分类-->
 	<div class="rightMenu">
 		<span><a href=""><img src="img/site/chaoshi.png"/></a></span>
 		<span><a href=""><img src="img/site/guoji.png"/></a></span>
 
-		<c:forEach items="${cs}" var="c" varStatus="st">
-			<c:if test="${st.count<=4}">
+		<c:forEach items="${categorys}" var="c" varStatus="st">
+			<c:if test="${st.count<=5}">
 				<span>
 				<a href="forecategory?cid=${c.id}">
 					${c.name}
@@ -97,7 +97,6 @@ $(function(){
 <div style="position: relative;left: 0;top: 0;">
 	<%@include file="productsAsideCategorys.jsp" %>
 </div>
-
 
 
 <%@include file="carousel.jsp" %>

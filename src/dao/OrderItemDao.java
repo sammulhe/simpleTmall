@@ -50,5 +50,48 @@ public class OrderItemDao {
 		return orderItems;
  	}
 	
+	
+	public int getProductSaleCount(int pid){
+		int total = 0;
+		String sql = "select number from orderItem where pid = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, pid);			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				total = total + rs.getInt(1);
+			}
+
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return total;
+	}
+	
+	public void add(OrderItem orderItem){
+		String sql = "insert into orderItem (pid,uid,number) values (?,?,?)";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, orderItem.getPid());
+			ps.setInt(2, orderItem.getUid());
+			ps.setInt(3, orderItem.getNumber());
+			ps.execute();
+			ResultSet rs = ps.getGeneratedKeys();
+			
+			while(rs.next()){
+				orderItem.setId(rs.getInt(1));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
 
 }

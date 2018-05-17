@@ -10,6 +10,7 @@ import dao.ProductDao;
 import dao.PropertyValueDao;
 import pojo.Category;
 import pojo.Product;
+import pojo.ProductImage;
 import pojo.PropertyValue;
 import util.Page;
 
@@ -24,6 +25,7 @@ public class ProductServlet extends BaseBackServlet{
 		page.setTotal(productDao.getTotal(cid)); //获取total，得到last
 		CategoryDao categoryDao = new CategoryDao();
 		Category category = categoryDao.getOne(cid);
+
 		request.setAttribute("products", products);
 		request.setAttribute("category", category);
 		request.setAttribute("page", page);

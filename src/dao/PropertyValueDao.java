@@ -13,10 +13,12 @@ import util.DBUtil;
 
 public class PropertyValueDao {
 	
+
+	//根据pid获取所有的property，但是如果属性值为空，那么就不可能获得属性名称了。
 	public List<PropertyValue> list(int pid){
 		List<PropertyValue> propertyValues = new ArrayList<>();
 		String sql = "select * from property_value pv left join property p on pv.ptid = p.id where pv.pid = ?";
-		
+		//String sql = "select * from property_value where ptid = ?";
 		try {
 			Connection connection = DBUtil.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);

@@ -62,13 +62,12 @@
 				<c:forEach items="${products}" var="p">
 					<tr>
 						<td>${p.id}</td>
+						
 						<td>
-						
-						<c:if test="${!empty p.id}">
-							<img width="40px" src="img/productSingle/${p.id}.jpg">
-						</c:if>
-						
-						</td>
+                          <c:if test="${!empty p.productSingleImages}">
+                            <img width="40px" src="img/productSingle/${p.firstProductImage.id}.jpg">
+                          </c:if>
+                        </td>
 						<td>${p.name}</td>
 						<td>${p.subTitle}</td>
 						<td>${p.originalPrice}</td>

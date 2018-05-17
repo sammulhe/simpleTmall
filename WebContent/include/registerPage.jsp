@@ -4,17 +4,46 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
-
-	
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>	
+<script src="../js/jquery-3.2.1.js"></script>
 <script>
+
 $(function(){
-	
 	<c:if test="${!empty msg}">
-	$("span.errorMessage").html("${msg}");
-	$("div.registerErrorMessageDiv").css("visibility","visible");		
-	</c:if>
+    $("span.errorMessage").html("${msg}");
+    $("div.registerErrorMessageDiv").css("visibility", "visible");
+    </c:if>
+	
+    var returnResult = true;  //检查用户名是否已经存在
+    
+	$("#name").keyup(function(){
+	     var page = "forecheckUserName";
+	     var value = $(this).val();	  
+	        $.post(
+	            page,
+	            {"username":value},
+	             function(result){
+	            	if(result == "true"){
+	            		$("#checkUserName").html("用户名可以使用");
+	            		$("#checkUserName").css("color","green");
+	            		returnResult = true;
+	            	}else{
+	            		$("#checkUserName").html("用户名已存在");
+	            		$("#checkUserName").css("color","red");
+	            		returnResult = false;
+	            	}
+	             }
+	        );
+	 });
 	
 	$(".registerForm").submit(function(){
+		//用户名已存在，不允许提交
+		if(false == returnResult){  
+			$("span.errorMessage").html("用户名已存在");
+			$("div.registerErrorMessageDiv").css("visibility","visible");
+			return false;
+		}
+			     
 		if(0==$("#name").val().length){
 			$("span.errorMessage").html("请输入用户名");
 			$("div.registerErrorMessageDiv").css("visibility","visible");			
@@ -34,11 +63,13 @@ $(function(){
 			$("span.errorMessage").html("重复密码不一致");
 			$("div.registerErrorMessageDiv").css("visibility","visible");			
 			return false;
-		}		
-
+		}
+		
 		return true;
 	});
 })
+
+
 </script>
 
 
@@ -62,7 +93,10 @@ $(function(){
 		</tr>
 		<tr>
 			<td class="registerTableLeftTD">登陆名</td>
-			<td  class="registerTableRightTD"><input id="name" name="name" placeholder="会员名一旦设置成功，无法修改" > </td>
+			<td  class="registerTableRightTD">
+			   <input id="name" name="username" placeholder="会员名一旦设置成功，无法修改" >
+		       <div id="checkUserName"></div>
+		    </td>
 		</tr>
 		<tr>
 			<td  class="registerTip registerTableLeftTD">设置登陆密码</td>
