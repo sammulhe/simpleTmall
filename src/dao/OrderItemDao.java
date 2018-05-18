@@ -79,7 +79,6 @@ public class OrderItemDao {
 	public void update(OrderItem orderItem){
 		String sql = "update orderItem set number = ? where id = ?";
 		try {
-			System.out.println("ooo" + orderItem.getNumber() + "  " + orderItem.getId());
 			Connection connection = DBUtil.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setInt(1, orderItem.getNumber());
@@ -222,7 +221,7 @@ public class OrderItemDao {
 	//获取用户购物车的总数
 	public int getCartTotal(int uid){
 		int total = 0;
-		String sql = "select count(*) from orderItem where oid is null and uid = ?";
+		String sql = "select * from orderItem where oid is null and uid = ?";
 		try {
 			Connection connection = DBUtil.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);
@@ -230,7 +229,7 @@ public class OrderItemDao {
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()){
-				total = rs.getInt(1);
+				total = total + rs.getInt(5);
 			}
 			
 			connection.close();

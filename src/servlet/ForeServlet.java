@@ -253,7 +253,7 @@ public class ForeServlet extends BaseForeServlet{
 		orderItem.setUid(uid);
 		orderItem.setNumber(num);
 		orderItemDao.add(orderItem);
-		System.out.println("oo" + orderItem.getNumber());
+
 		//购物车中数量加上num数
 		Integer cartTotalItemNumber = (Integer) request.getSession().getAttribute("cartTotalItemNumber");
 		cartTotalItemNumber = cartTotalItemNumber + num;
@@ -262,6 +262,8 @@ public class ForeServlet extends BaseForeServlet{
 		return "%success";
 	}
 	
+	
+	//点击购物车，跳到购物车的页面，显示已经被加入到购物车的订单项信息
 	public String cart(HttpServletRequest request, HttpServletResponse response, Page page){
 		User user = (User) request.getSession().getAttribute("user");
 		int uid = user.getId();
@@ -279,6 +281,8 @@ public class ForeServlet extends BaseForeServlet{
 		return "cart.jsp";
 	}
 	
+	
+	//删去购物车中的订单项
 	public String deleteOrderItem(HttpServletRequest request, HttpServletResponse response, Page page){
 		int oiid = Integer.parseInt(request.getParameter("oiid"));
 				
@@ -290,5 +294,25 @@ public class ForeServlet extends BaseForeServlet{
 		orderItemDao.delete(oiid);
 		
 		return "%success";
+	}
+	
+	//购物车中改变订单项的产品数量
+	public String changeOrderItem(HttpServletRequest request, HttpServletResponse response, Page page){
+		//int pid = Integer.parseInt(request.getParameter("pid"));以后用来减掉product的stock库存
+		int number = Integer.parseInt(request.getParameter("number"));
+		int oiid = Integer.parseInt(request.getParameter("oiid"));
+		
+		OrderItem orderItem = new OrderItem();
+		orderItem.setId(oiid);
+		orderItem.setNumber(number);
+		
+		orderItemDao.update(orderItem);
+		
+		User user = (User) request.getSession().getAttribute("user");
+		int uid = user.getId();
+		int cartTotalItemNumber = orderItemDao.getCartTotal(uid);
+		request.getSession().setAttribute("cartTotalItemNumber", cartTotalItemNumber);
+		
+		return "%success";		
 	}
 }

@@ -198,11 +198,12 @@ function syncPrice(pid,num,price){
 	var cartProductItemSmallSumPrice = formatMoney(num*price); 
 	$(".cartProductItemSmallSumPrice[pid="+pid+"]").html("￥"+cartProductItemSmallSumPrice);
 	calcCartSumPriceAndNumber();
+	var oiid = $(".orderItemNumberSetting[pid="+pid+"]").attr("oiid");
 	
 	var page = "forechangeOrderItem";
 	$.post(
 		    page,
-		    {"pid":pid,"number":num},
+		    {"pid":pid,"number":num,"oiid":oiid},
 		    function(result){
 				if("success"!=result){
 					location.href="login.jsp";
