@@ -48,6 +48,7 @@ public class CategoryServlet extends BaseBackServlet{
 		category.setId(Integer.parseInt(params.get("id")));
 		category.setName(params.get("name"));
 		saveAsPhoto(request,item,Integer.parseInt(params.get("id")));
+		System.out.println("oo" + params.get("id"));
 		categoryDao.update(category);
 		
 		return "@admin_category_list";
@@ -75,11 +76,13 @@ public class CategoryServlet extends BaseBackServlet{
 	
 	
 	public void saveAsPhoto(HttpServletRequest request, FileItem item, int categoryId){
+		String originFileName = item.getName(); //获取上传文件的完整路径名
+		String suffix = originFileName.substring(originFileName.lastIndexOf(".")); //获取文件后缀	
+		String filename = categoryId + suffix;
 		//String photoFolder = request.getServletContext().getRealPath("/img/category");  因为项目已部署到tomcat，会把文件保存到tomcat下，而不是在项目中
 		//为了在eclipse方便开发，直接存在项目中，之后发布到服务器还是要改会上面的语句，保存到服务器端
-		String photoFolder = "D:\\workspace\\simple_tmall\\WebContent\\img\\category";
-		String filename = categoryId + ".jpg";
-		
+		String photoFolder = "D:\\workspace\\simpleTmall\\WebContent\\img\\category";
+				
 		File file = new File(photoFolder,filename);
 		file.getParentFile().mkdirs();
 		
