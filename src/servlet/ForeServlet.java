@@ -32,7 +32,7 @@ public class ForeServlet extends BaseForeServlet{
 		    productsByRow = productDao.getProductsByRow(products);
 			category.setProducts(products);
 		    category.setProductsByRow(productsByRow);
-		    
+
 		    categorys.add(category);
 		}
 		

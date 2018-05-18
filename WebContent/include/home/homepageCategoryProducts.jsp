@@ -18,7 +18,7 @@
 
 <!--主题的17种分类以及每种分类对应的5个产品 -->
 <c:if test="${empty param.categorycount}">
-	<c:set var="categorycount" scope="page" value="10"/>   <!--页面最下面显示多少个分类-->
+	<c:set var="categorycount" scope="page" value="17"/>   <!--页面最下面显示多少个分类-->
 </c:if>
 
 <c:if test="${!empty param.categorycount}">
