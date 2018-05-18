@@ -225,4 +225,24 @@ public class ProductDao {
     	
     	return products;
     }
+    
+    //给一个List<product>给分成五个五个的List<List<product>>
+    public List<List<Product>> getProductsByRow(List<Product> products){
+    	int col = 1;
+    	int index = 1;
+    	List<List<Product>> productsByRow = new ArrayList<>();
+    	List<Product> tmp = new ArrayList<>();
+    	
+    	for(int i = 0; i < products.size(); i++){
+    		if(index % col == 0){
+    			tmp.add(products.get(i));
+    			productsByRow.add(tmp);
+    			tmp.clear();
+    		}else{
+    			tmp.add(products.get(i));
+    		}
+    	}
+    	
+    	return productsByRow;
+    }
 }

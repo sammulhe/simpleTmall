@@ -15,6 +15,14 @@ import util.DBUtil;
 
 public class CategoryDao {
     
+	//获取所有category
+	public List<Category> list(){
+		int total = this.getTotal();
+		List<Category> categorys = this.list(0, total);
+		
+		return categorys;
+	}
+	
     //分页获取Category
     public List<Category> list(int start, int count){
     	List<Category> categorys = new ArrayList<>(); //必须初始化，不然是空指针
