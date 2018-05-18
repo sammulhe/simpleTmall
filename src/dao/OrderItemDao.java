@@ -50,6 +50,67 @@ public class OrderItemDao {
 		return orderItems;
  	}
 	
+	public OrderItem getOne(int id){
+		OrderItem orderItem = new OrderItem();
+		String sql = "select * from orderItem where id = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				orderItem.setId(rs.getInt(1));
+				orderItem.setPid(rs.getInt(2));
+				orderItem.setOid(rs.getInt(3));
+				orderItem.setUid(rs.getInt(4));
+				orderItem.setNumber(rs.getInt(5));
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return orderItem;
+	}
+	
+	public void update(OrderItem orderItem){
+		String sql = "update orderItem set number = ? where id = ?";
+		try {
+			System.out.println("ooo" + orderItem.getNumber() + "  " + orderItem.getId());
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, orderItem.getNumber());
+			ps.setInt(2, orderItem.getId());
+			ps.executeUpdate();
+			
+			System.out.println("ooo" + orderItem.getNumber());
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void delete(int id){
+		String sql = "delete from orderItem where id = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ps.execute();
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
 	
 	public int getProductSaleCount(int pid){
 		int total = 0;
@@ -74,6 +135,10 @@ public class OrderItemDao {
 	}
 	
 	public void add(OrderItem orderItem){
+		//如果数据库中存在可以合并的订单，直接就返回,在check的时候已经合并了
+		if(this.checkExit(orderItem) == true){
+			return;
+		}
 		String sql = "insert into orderItem (pid,uid,number) values (?,?,?)";
 		try {
 			Connection connection = DBUtil.getConnection();
@@ -87,11 +152,93 @@ public class OrderItemDao {
 			while(rs.next()){
 				orderItem.setId(rs.getInt(1));
 			}
+			
+			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
+	
+	//在添加新的订单项的时候，先看看是否是存在订单项可以合并，uid，oid，pid都相同即认为可以合并，就是number数相加
+	public boolean checkExit(OrderItem orderItem){
+		String sql = "select * from orderItem where oid is null and uid = ? and pid = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, orderItem.getUid());
+			ps.setInt(2, orderItem.getPid());
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){	
+				orderItem.setId(rs.getInt(1));
+				orderItem.setNumber(orderItem.getNumber() + rs.getInt(5));
+				connection.close();  //close要在update前，setnumber后执行，不然close以后，就没有任何数据，update前必须close，不然数据库会锁定
+				update(orderItem);
+				return true;
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	
+	//获取用户购物车的订单
+	public List<OrderItem> getCartOrderItems(int uid){
+		List<OrderItem> orderItems = new ArrayList<>();
+		String sql = "select * from orderItem where oid is null and uid = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, uid);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				OrderItem orderItem = new OrderItem();
+				orderItem.setId(rs.getInt(1));
+				orderItem.setPid(rs.getInt(2));
+				orderItem.setUid(rs.getInt(4));
+				orderItem.setNumber(rs.getInt(5));
+				orderItem.setOid(rs.getInt(3));
+			
+				orderItems.add(orderItem);
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return orderItems;
+	}
 
+	//获取用户购物车的总数
+	public int getCartTotal(int uid){
+		int total = 0;
+		String sql = "select count(*) from orderItem where oid is null and uid = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, uid);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				total = rs.getInt(1);
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return total;
+	}
 }

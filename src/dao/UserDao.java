@@ -73,8 +73,9 @@ public class UserDao {
 	
 	public void add(User user){
 		String sql = "insert into user (username,password) values (?,?)";
+		Connection connection = null;
 		try {
-			Connection connection = DBUtil.getConnection();
+			connection = DBUtil.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(1, user.getUsername());
 			ps.setString(2, user.getPassword());
@@ -86,6 +87,29 @@ public class UserDao {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	//用于检查用户名是否存在
+	public boolean check(String username){
+		String sql = "select * from user where username = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, username);
+			ResultSet rs = ps.executeQuery();
+			
+			if(rs.next()){
+				connection.close();
+				return true;
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return false;
 	}
 	
 	//用于用户登录，检查账号密码是否正确
@@ -105,6 +129,8 @@ public class UserDao {
 					user.setId(rs.getInt(1));
 					user.setUsername(rs.getString(2));
 					user.setPassword(rs.getString(3));
+					
+					connection.close(); //在return前必须要先close connection，不然以后只能对数据库进行查询功能
 					return user;
 				}
 			}

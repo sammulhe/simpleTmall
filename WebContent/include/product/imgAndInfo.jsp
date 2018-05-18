@@ -8,7 +8,7 @@
 <script>
  
 $(function(){
-   /* var stock =  10;
+    var stock = ${product.stock};
     $(".productNumberSetting").keyup(function(){
         var num= $(".productNumberSetting").val();
         num = parseInt(num);
@@ -39,14 +39,14 @@ $(function(){
     $(".addCartButton").removeAttr("disabled");
     $(".addCartLink").click(function(){
         var page = "forecheckLogin";
-        $.get(
+        $.post(
                 page,
                 function(result){
                     if("success"==result){
-                        var pid = ${p.id};
+                        var pid = ${product.id};
                         var num= $(".productNumberSetting").val();
                         var addCartpage = "foreaddCart";
-                        $.get(
+                        $.post(
                                 addCartpage,
                                 {"pid":pid,"num":num},
                                 function(result){
@@ -70,7 +70,7 @@ $(function(){
                 }
         );      
         return false;
-    });*/
+    });
     $(".buyLink").click(function(){
         var page1 = "forecheckLogin";
         $.post(
