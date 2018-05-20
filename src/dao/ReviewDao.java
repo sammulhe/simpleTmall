@@ -74,4 +74,22 @@ public class ReviewDao {
 		
 		return total;
 	}
+	
+	public void add(Review review){
+		String sql = "insert into review (content,createDate,uid,pid) values (?,?,?,?)";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, review.getContent());
+			ps.setString(2, DateUtil.DateToString(review.getCreateDate()));
+			ps.setInt(3, review.getUid());
+			ps.setInt(4, review.getPid());
+			ps.executeUpdate();
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

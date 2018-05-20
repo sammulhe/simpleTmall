@@ -47,9 +47,9 @@ public class OrderServlet extends BaseBackServlet{
 		Date date = new Date(); //获取当前时间
 				
 		Order order = new Order();
+		order = orderDao.getOne(id);
 		order.setStatus("waitConfirm");
 		order.setDeliveryDate(DateUtil.DateToString(date));
-		order.setId(id);
 		orderDao.update(order);
 		
 		return "@admin_order_list";

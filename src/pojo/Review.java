@@ -8,6 +8,7 @@ public class Review {
     private Date createDate;
     private int uid;
     private int pid;
+    private User user;
     
     
 	public int getId() {
@@ -47,6 +48,15 @@ public class Review {
 	}
 	public void setPid(int pid) {
 		this.pid = pid;
+	}
+	
+	
+	
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
 	}
 		
 }

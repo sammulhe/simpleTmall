@@ -13,6 +13,35 @@ import util.DBUtil;
 
 public class OrderItemDao {
 	
+	public List<OrderItem> foreList(int oid){
+		List<OrderItem> orderItems = new ArrayList<>();
+		String sql = "select * from orderItem where oid = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, oid);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				OrderItem orderItem = new OrderItem();
+				orderItem.setId(rs.getInt(1));
+				orderItem.setPid(rs.getInt(2));
+				orderItem.setOid(rs.getInt(3));
+				orderItem.setUid(rs.getInt(4));
+				orderItem.setNumber(rs.getInt(5));
+				
+				orderItems.add(orderItem);
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return orderItems;
+	}
+	
 	//不需要分页
 	public List<OrderItem> list(int oid){
 		List<OrderItem> orderItems = new ArrayList<>();

@@ -7,15 +7,15 @@
 	
 <div class="reviewDiv">
 	<div class="reviewProductInfoDiv">
-		<div class="reviewProductInfoImg"><img width="400px" height="400px" src="img/productSingle/${p.firstProductImage.id}.jpg"></div>
+		<div class="reviewProductInfoImg"><img width="400px" height="400px" src="img/productSingle/${product.firstProductImage.id}.jpg"></div>
 		<div class="reviewProductInfoRightDiv">
 			<div class="reviewProductInfoRightText">
-				${p.name}
+				${product.name}
 			</div>
 			<table class="reviewProductInfoTable">
 				<tr>
 					<td width="75px">价格:</td>
-					<td><span class="reviewProductInfoTablePrice">￥<fmt:formatNumber type="number" value="${p.orignalPrice}" minFractionDigits="2"/></span> 元 </td>
+					<td><span class="reviewProductInfoTablePrice">￥<fmt:formatNumber type="number" value="${product.originalPrice}" minFractionDigits="2"/></span> 元 </td>
 				</tr>
 				<tr>
 					<td>配送</td>
@@ -23,14 +23,14 @@
 				</tr>
 				<tr>
 					<td>月销量:</td>
-					<td><span class="reviewProductInfoTableSellNumber">${p.saleCount}</span> 件</td>
+					<td><span class="reviewProductInfoTableSellNumber">${product.saleCount}</span> 件</td>
 				</tr>
 			</table>
 			
 			<div class="reviewProductInfoRightBelowDiv">
 				<span class="reviewProductInfoRightBelowImg"><img1 src="img/site/reviewLight.png"></span>
 				<span class="reviewProductInfoRightBelowText" >现在查看的是 您所购买商品的信息
-于<fmt:formatDate value="${o.createDate}" pattern="yyyy年MM月dd"/>下单购买了此商品 </span>
+于"${order.createDate}"下单购买了此商品 </span>
 			
 			</div>
 		</div>
@@ -39,7 +39,7 @@
 	<div class="reviewStasticsDiv">
 		<div class="reviewStasticsLeft">
 				<div class="reviewStasticsLeftTop"></div>
-				<div class="reviewStasticsLeftContent">累计评价 <span class="reviewStasticsNumber"> ${p.reviewCount}</span></div>
+				<div class="reviewStasticsLeftContent">累计评价 <span class="reviewStasticsNumber"> ${product.reviewCount}</span></div>
 				<div class="reviewStasticsLeftFoot"></div>
 		</div>
 		<div class="reviewStasticsRight">
@@ -48,7 +48,7 @@
 		</div>
 	</div>		
 	
-	<c:if test="${param.showonly==true}">
+	<c:if test="${order.status == 'finish'}">
 	<div class="reviewDivlistReviews">
 		<c:forEach items="${reviews}" var="r">
 			<div class="reviewDivlistReviewsEach">
@@ -60,7 +60,7 @@
 	</div>
 	</c:if>
 	
-	<c:if test="${param.showonly!=true}">
+	<c:if test="${order.status != 'finish'}">
 		<div class="makeReviewDiv">
 		<form method="post" action="foredoreview">
 			<div class="makeReviewText">其他买家，需要你的建议哦！</div>
@@ -71,8 +71,8 @@
 				</tr>
 			</table>
 			<div class="makeReviewButtonDiv">
-				<input type="hidden" name="oid" value="${o.id}">
-				<input type="hidden" name="pid" value="${p.id}">
+				<input type="hidden" name="oid" value="${order.id}">
+				<input type="hidden" name="pid" value="${product.id}">
 				<button type="submit">提交评价</button>
 			</div>
 		</form>

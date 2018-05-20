@@ -169,4 +169,67 @@ public class OrderDao {
 		return order;		
 	}
 	
+	public void delete(int id){
+		String sql = "delete from 'order' where id = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ps.execute();
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	//根据status获取用户的订单
+	public List<Order> getUserOrder(int uid, String status){
+		List<Order> orders = new ArrayList<>();
+		String sql = null;
+		
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = null;
+			if(status == null){
+				sql = "select * from 'order' where uid = ? and status != ?";
+			    ps = connection.prepareStatement(sql);
+			    ps.setInt(1, uid);
+			    ps.setString(2, "delete");
+			}else{
+				sql = "select * from 'order' where status = ? and uid = ?";
+				ps = connection.prepareStatement(sql);
+				ps.setString(1, status);
+				ps.setInt(2, uid);
+			}			
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				Order order = new Order();
+				order.setId(rs.getInt(1));
+				order.setOrderCode(rs.getString(2));
+				order.setAddress(rs.getString(3));
+				order.setPost(rs.getString(4));
+				order.setReceiver(rs.getString(5));
+				order.setMobile(rs.getString(6));
+				order.setUserMessage(rs.getString(7));
+				order.setCreateDate(rs.getString(8));
+				order.setPayDate(rs.getString(9));
+				order.setDeliveryDate(rs.getString(10));
+				order.setConfirmDate(rs.getString(11));
+				order.setStatus(rs.getString(12));
+				order.setUid(rs.getInt(13));
+				
+				orders.add(order);				
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return orders;
+	}
 }

@@ -27,6 +27,7 @@ import pojo.Product;
 import pojo.PropertyValue;
 import pojo.Review;
 import pojo.User;
+import util.DBUtil;
 import util.DateUtil;
 import util.Page;
 
@@ -425,5 +426,145 @@ public class ForeServlet extends BaseForeServlet{
 		request.setAttribute("total", total);
 		
 		return "payed.jsp";
+	}
+	
+	
+	//显示所有订单
+	public String bought(HttpServletRequest request, HttpServletResponse response, Page page){
+		User user = (User) request.getSession().getAttribute("user");
+		int uid = user.getId();
+		
+		List<Order> orders = new ArrayList<>();
+		
+		orders = orderDao.getUserOrder(uid,null); //获取用户所有订单
+		for(Order order : orders){
+			List<OrderItem> orderItems = new ArrayList<>(); 
+			orderItems = orderItemDao.foreList(order.getId());
+			//把product注入到每个orderItem中		
+			for(OrderItem orderItem : orderItems){
+				Product product = new Product();
+				product = productDao.getOne(orderItem.getPid());
+				orderItem.setProduct(product);
+			}
+			order.setOrderItems(orderItems);
+		}
+		
+		request.setAttribute("orders", orders);
+		
+		return "bought.jsp";
+	}
+	
+	//在订单页点击确认收货，跳到确认付款页面
+	public String confirmPay(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		
+		Order order = new Order();
+		List<OrderItem> orderItems = new ArrayList<>();
+		
+		order = orderDao.getOne(oid);
+		orderItems = orderItemDao.foreList(order.getId());
+		for(OrderItem orderItem : orderItems){
+			Product product = new Product();
+			product = productDao.getOne(orderItem.getPid());
+			orderItem.setProduct(product);
+		}
+		order.setOrderItems(orderItems);
+
+		request.setAttribute("order", order);
+		
+		return "confirmPay.jsp";
+	}
+	
+	//在确认收货页面中，点击确认支付
+	public String orderConfirmed(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		Date date = new Date();
+		
+		Order order = new Order();
+		
+		order = orderDao.getOne(oid);
+		order.setStatus("waitReview");
+		order.setConfirmDate(DateUtil.DateToString(date));
+		orderDao.update(order);
+		
+		return "orderConfirmed.jsp";
+	}
+	
+	//完成订单后，点击评价，跳到评价页面
+	public String review(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		
+		Order order = new Order();
+		List<OrderItem> orderItems = new ArrayList<>();
+		
+		order = orderDao.getOne(oid);
+		orderItems = orderItemDao.foreList(order.getId());
+		for(OrderItem orderItem : orderItems){
+			Product product = new Product();
+			product = productDao.getOne(orderItem.getPid());
+			orderItem.setProduct(product);
+		}
+		order.setOrderItems(orderItems);
+		
+		request.setAttribute("order", order);
+		request.setAttribute("product", order.getOrderItems().get(0).getProduct());
+		
+		return "review.jsp";
+	}
+	
+	//在评价页面提交评价
+	public String doreview(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		int pid = Integer.parseInt(request.getParameter("pid"));
+		String content = request.getParameter("content");
+		User user = (User) request.getSession().getAttribute("user");
+		int uid = user.getId();
+		Date date = new Date();
+		
+		Review review = new Review();
+		List<Review> reviews = new ArrayList<>();
+		Order order = new Order();
+		Product product = new Product();
+		
+		review.setContent(content);
+		review.setPid(pid);
+		review.setUid(uid);
+		review.setCreateDate(date);
+		reviewDao.add(review);
+		reviews = reviewDao.list(pid);  //获取每个用户
+		for(Review r : reviews){
+			User u = new User();
+			u = userDao.getOne(uid);
+			r.setUser(u);
+		}
+			
+		for(Review r : reviews){
+			System.out.println("ooo" + r.getContent());
+		}
+		
+	    order = orderDao.getOne(oid);
+		order.setStatus("finish");
+		orderDao.update(order);
+		
+		product = productDao.getOne(pid);
+		
+		request.setAttribute("reviews", reviews);
+		request.setAttribute("order", order);
+		request.setAttribute("product", product);
+		request.setAttribute("showOnly", true);
+		
+		return "review.jsp";
+	}
+	
+	
+	//删除订单
+	public String deleteOrder(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		
+		Order order = orderDao.getOne(oid);
+		order.setStatus("delete");
+		orderDao.update(order);
+		
+		return "%success";
 	}
 }

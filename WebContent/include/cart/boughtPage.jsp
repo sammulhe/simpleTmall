@@ -104,11 +104,12 @@ $(function(){
 	</div>
 	
 	<div class="orderListItem">
-		<c:forEach items="${os}" var="o">
+		<c:forEach items="${orders}" var="o">
 			<table class="orderListItemTable" orderStatus="${o.status}" oid="${o.id}">
 				<tr class="orderListItemFirstTR">
 					<td colspan="2">
-					<b><fmt:formatDate value="${o.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></b> 
+					<%--<b><fmt:formatDate value="${o.createDate}" pattern="yyyy-MM-dd HH:mm:ss"/></b>--%>
+					<b>${o.createDate} </b> 
 					<span>订单号: ${o.orderCode} 
 					</span>
 					</td>
@@ -141,7 +142,7 @@ $(function(){
 						</td>
 						<td  class="orderItemProductInfoPartTD" width="100px">
 						
-							<div class="orderListItemProductOriginalPrice">￥<fmt:formatNumber type="number" value="${oi.product.orignalPrice}" minFractionDigits="2"/></div>
+							<div class="orderListItemProductOriginalPrice">￥<fmt:formatNumber type="number" value="${oi.product.originalPrice}" minFractionDigits="2"/></div>
 							<div class="orderListItemProductPrice">￥<fmt:formatNumber type="number" value="${oi.product.promotePrice}" minFractionDigits="2"/></div>
 		
 		
@@ -169,7 +170,7 @@ $(function(){
 								
 								<c:if test="${o.status=='waitDelivery' }">
 									<span>待发货</span>
-<%-- 									<button class="btn btn-info btn-sm ask2delivery" link="admin_order_delivery?id=${o.id}">催卖家发货</button> --%>
+									<button class="btn btn-info btn-sm ask2delivery" link="admin_order_delivery?id=${o.id}">催卖家发货</button>
 									
 								</c:if>
 

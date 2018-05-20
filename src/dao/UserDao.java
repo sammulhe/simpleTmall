@@ -70,6 +70,29 @@ public class UserDao {
 		return total;
 	}
 	
+	public User getOne(int id){
+		User user = new User();
+		String sql = "select * from user where id = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				user.setId(rs.getInt(1));
+				user.setUsername(rs.getString(2));
+				user.setPassword(rs.getString(3));
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return user;
+	}
 	
 	public void add(User user){
 		String sql = "insert into user (username,password) values (?,?)";
