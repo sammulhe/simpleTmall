@@ -14,7 +14,7 @@
 	<div>
 		<span class="confirmMoneyText">扫一扫付款（元）</span>
 		<span class="confirmMoney">
-		￥<fmt:formatNumber type="number" value="${param.total}" minFractionDigits="2"/></span>
+		￥<fmt:formatNumber type="number" value="${total}" minFractionDigits="2"/></span>
 		
 	</div>
 	<div>
@@ -23,7 +23,7 @@
 
 	
 	<div>
-		<a href="forepayed?oid=${param.oid}&total=${param.total}"><button class="confirmPay">确认支付</button></a>
+		<a href="forepayed?oid=${oid}&total=${total}"><button class="confirmPay">确认支付</button></a>
 	</div>
 
 </div>

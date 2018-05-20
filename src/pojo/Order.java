@@ -15,6 +15,7 @@ public class Order {
 	private String deliveryDate; //发货日期
 	private String confirmDate;  //确认收货日期
 	private String status;   //订单状态
+	private int uid; //用户id
 	
 	private List<OrderItem> orderItems; //获取OrderItems,计算总金额,OrderItem本身有数量又有Product，Product有商品价格
 	private User user; //获取下该订单的用户
@@ -155,5 +156,11 @@ public class Order {
 		}
 		
 		return statusZH;
+	}
+	public int getUid() {
+		return uid;
+	}
+	public void setUid(int uid) {
+		this.uid = uid;
 	}
 }

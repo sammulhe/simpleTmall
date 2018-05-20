@@ -80,14 +80,17 @@ public class OrderDao {
 	
 	//更新
 	public void update(Order order){
-		String sql = "update 'order' set status = ?, deliveryDate = ? where id = ?";
+		String sql = "update 'order' set status = ?,createDate=?,payDate=?,deliveryDate = ?,confirmDate=? where id = ?";
 		
 		try {
 			Connection connection = DBUtil.getConnection();
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setString(1, order.getStatus());
-			ps.setString(2, order.getDeliveryDate());
-			ps.setInt(3, order.getId());
+			ps.setString(2, order.getCreateDate());
+			ps.setString(3, order.getPayDate());
+			ps.setString(4, order.getDeliveryDate());
+			ps.setString(5, order.getConfirmDate());
+			ps.setInt(6, order.getId());
 			ps.executeUpdate();
 			
 			connection.close();
@@ -96,6 +99,74 @@ public class OrderDao {
 			e.printStackTrace();
 		}
 		
+	}
+	
+	//插入一个订单
+	public void add(Order order){
+		String sql = "insert into 'order' (orderCode,address,post,receiver,mobile,userMessage,createDate,status,uid)"
+				+ "values (?,?,?,?,?,?,?,?,?)";
+		
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, order.getOrderCode());
+			ps.setString(2, order.getAddress());
+			ps.setString(3, order.getPost());
+			ps.setString(4, order.getReceiver());
+			ps.setString(5, order.getMobile());
+			ps.setString(6, order.getUserMessage());
+			ps.setString(7, order.getCreateDate());
+			ps.setString(8, order.getStatus());
+			ps.setInt(9, order.getUid());
+			ps.execute();
+			ResultSet rs = ps.getGeneratedKeys();
+			
+			while(rs.next()){
+				order.setId(rs.getInt(1));
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	public Order getOne(int id){
+		Order order = new Order();
+		String sql = "select * from 'order' where id = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			ResultSet rs = ps.executeQuery();
+			
+			while(rs.next()){
+				order.setId(rs.getInt(1));
+				order.setOrderCode(rs.getString(2));
+				order.setAddress(rs.getString(3));
+				order.setPost(rs.getString(4));
+				order.setReceiver(rs.getString(5));
+				order.setMobile(rs.getString(6));
+				order.setUserMessage(rs.getString(7));
+				order.setCreateDate(rs.getString(8));
+				order.setPayDate(rs.getString(9));
+				order.setDeliveryDate(rs.getString(10));
+				order.setConfirmDate(rs.getString(11));
+				order.setStatus(rs.getString(12));
+				order.setUid(rs.getInt(13));
+				
+			}
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return order;		
 	}
 	
 }

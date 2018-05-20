@@ -2,6 +2,7 @@ package filter;
 
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.Filter;
@@ -13,10 +14,18 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
+
+import pojo.User;
+
 
 
 public class authFilter implements Filter{
 
+	private static String PREFIX = "/fore";
+    private static String SERVLET_PATH = "/foreServlet";
+   // private static String BACK ="/admin";  //后台管理员验证
+	 
 	@Override
 	public void destroy() {
 		// TODO Auto-generated method stub
@@ -33,19 +42,40 @@ public class authFilter implements Filter{
 		
 		request.setCharacterEncoding("UTF-8"); //同时把所有请求的字符编码设置为UTF-8
 		
-		/*
-		String uri = request.getRequestURI();
-		if(uri.contains("login") || uri.contains("index") || uri.contains("Product")){
-			chain.doFilter(request, response);
-			return;
-		}
 		
-		String username = (String) request.getSession().getAttribute("username");
-		if(username == null){
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		*/
+		
+
+	    String[] noNeedAuthPage = new String[]{
+	                "home",
+	                "checkLogin",
+	                "register",
+	                "loginAjax",
+	                "login",
+	                "product",
+	                "category",
+	                "search"
+	    };
+	    
+	    String contextPath = request.getServletContext().getContextPath();
+	    String uri = request.getRequestURI();
+	    uri = StringUtils.remove(uri, contextPath);
+	    if (uri.startsWith(PREFIX) && !uri.startsWith(SERVLET_PATH)) {
+	    	String method = StringUtils.substringAfterLast(uri, PREFIX);
+	        if (!Arrays.asList(noNeedAuthPage).contains(method)) {
+	        	User user = (User) request.getSession().getAttribute("user");
+	            if (null == user) {
+	            	response.sendRedirect("login.jsp");
+	                return;
+	            }
+	        }
+	    }
+	    
+	    //用于后台的验证，暂时不做
+	    /*
+	    if(uri.startsWith(BACK)){
+	    	
+	    }*/
+		
 		chain.doFilter(request, response);
 	}
 

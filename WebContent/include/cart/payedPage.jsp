@@ -13,9 +13,9 @@
 	</div>
 	<div class="payedAddressInfo">
 		<ul>
-			<li>收货地址：${o.address} ${o.receiver} ${o.mobile }</li>
+			<li>收货地址：${order.address} ${order.receiver} ${order.mobile }</li>
 			<li>实付款：<span class="payedInfoPrice">
-			￥<fmt:formatNumber type="number" value="${param.total}" minFractionDigits="2"/>
+			￥<fmt:formatNumber type="number" value="${total}" minFractionDigits="2"/>
 			</li>
 			<li>预计08月08日送达	</li>
 		</ul>

@@ -1,24 +1,33 @@
 package servlet;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.math.RandomUtils;
+
 import dao.CategoryDao;
+import dao.OrderDao;
 import dao.OrderItemDao;
 import dao.ProductDao;
 import dao.PropertyValueDao;
 import dao.ReviewDao;
 import dao.UserDao;
 import pojo.Category;
+import pojo.Order;
 import pojo.OrderItem;
 import pojo.Product;
 import pojo.PropertyValue;
 import pojo.Review;
 import pojo.User;
+import util.DateUtil;
 import util.Page;
 
 public class ForeServlet extends BaseForeServlet{
@@ -29,6 +38,7 @@ public class ForeServlet extends BaseForeServlet{
 	private static ReviewDao reviewDao = new ReviewDao();
 	private static UserDao userDao = new UserDao();
 	private static OrderItemDao orderItemDao = new OrderItemDao();
+	private static OrderDao orderDao = new OrderDao();
 	
 	public String home(HttpServletRequest request, HttpServletResponse response, Page page){
 		
@@ -314,5 +324,106 @@ public class ForeServlet extends BaseForeServlet{
 		request.getSession().setAttribute("cartTotalItemNumber", cartTotalItemNumber);
 		
 		return "%success";		
+	}
+	
+	
+	//在购物车页面，点击结算，跳到了buy.jsp，跟立即购买（buyone)跳转到填写订单信息的页面
+	public String buy(HttpServletRequest request, HttpServletResponse response, Page page){
+		String[] params = request.getParameterValues("oiid");  //有多个订单项id
+		
+		List<OrderItem> orderItems = new ArrayList<>();
+		float total = 0;//计算订单的总金额
+				
+		for(String s : params){
+			int oiid = Integer.parseInt(s);
+			OrderItem orderItem = orderItemDao.getOne(oiid);
+			Product product = productDao.getOne(orderItem.getPid());
+			orderItem.setProduct(product);
+			total = total + orderItem.getNumber() * product.getPromotePrice();
+			orderItems.add(orderItem);
+		}
+	
+		request.getSession().setAttribute("orderItems", orderItems); //在生成订单中个需要用到这些订单项，所以存在session中
+		request.setAttribute("total", total);
+		return "buy.jsp";
+	}
+	
+	
+	//填完订单的详细信息后，提交订单，在数据库中生成订单
+	public String createOrder(HttpServletRequest request, HttpServletResponse response, Page page){
+		//从网页获取的参数
+		String address = request.getParameter("address");
+		String post = request.getParameter("post");
+		String receiver = request.getParameter("receiver");
+		String mobile = request.getParameter("mobile");
+		String userMessage= request.getParameter("userMessage");
+		User user = (User) request.getSession().getAttribute("user");
+		int uid = user.getId();
+		//自身成的参数
+		Date date = new Date();
+		String createDate = DateUtil.DateToString(date);
+		String orderCode = new SimpleDateFormat("yyyyMMddHHmmssSSS").format(date) + RandomUtils.nextInt(10000);
+		String status = "waitPay";
+		
+		Order order = new Order();
+		order.setAddress(address);
+		order.setPost(post);
+		order.setReceiver(receiver);
+		order.setMobile(mobile);
+		order.setUserMessage(userMessage);
+		order.setUid(uid);
+		order.setOrderCode(orderCode);
+		order.setCreateDate(createDate);
+		order.setStatus(status);
+		
+		orderDao.add(order);
+		
+		float total = 0;  //获取订单的总金额
+		int oid = order.getId();
+		
+		//将返回的order的id号赋值到每个订单项的oid中
+		@SuppressWarnings("unchecked")
+		List<OrderItem> orderItems = (List<OrderItem>) request.getSession().getAttribute("orderItems");
+		for(OrderItem orderItem : orderItems){
+			orderItem.setOid(oid);
+			orderItemDao.updateOid(orderItem);
+			total = total + orderItem.getNumber() * orderItem.getProduct().getPromotePrice();
+		}
+	
+		request.getSession().removeAttribute("orderItems");  //移除在session中orderItems
+		
+
+	    return "@forealipay?oid="+oid+"&total="+total+"";		
+	}
+	
+	
+	//可能提交订单后没有付款，所以需要用一个中转网页，即便这次放弃了付款
+	//可以在我的未付款订单中重新跳到该页面进行付款，而不是重新createOrder
+	public String alipay(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		float total = Float.parseFloat(request.getParameter("total"));
+		
+		request.setAttribute("total", total);
+		request.setAttribute("oid", oid);
+		
+		return "alipay.jsp";
+	}
+	
+	
+	//点击付款
+	public String payed(HttpServletRequest request, HttpServletResponse response, Page page){
+		int oid = Integer.parseInt(request.getParameter("oid"));
+		float total = Float.parseFloat(request.getParameter("total"));
+		Date date = new Date();
+		
+		Order order = orderDao.getOne(oid);
+		order.setPayDate(DateUtil.DateToString(date));
+		order.setStatus("waitDelivery");
+		orderDao.update(order);
+		
+		request.setAttribute("order", order);
+		request.setAttribute("total", total);
+		
+		return "payed.jsp";
 	}
 }

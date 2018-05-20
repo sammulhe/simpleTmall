@@ -21,7 +21,7 @@
 				<tr>
 					<td class="firstColumn">详细地址<span class="redStar">*</span></td>
 					
-					<td><textarea name="address" placeholder="建议您如实填写详细收货地址，例如接到名称，门牌好吗，楼层和房间号等信息"></textarea></td>
+					<td><input type="text" name="address" placeholder="建议您如实填写详细收货地址，例如接到名称，门牌好吗，楼层和房间号等信息"/></td>
 				</tr>
 				<tr>
 					<td>邮政编码</td>
@@ -123,7 +123,7 @@
 					<img class="leaveMessageImg" src="img/site/leaveMessage.png">
 				</span>
 				<span class="leaveMessageTextareaSpan">
-					<textarea name="userMessage" class="leaveMessageTextarea"></textarea>
+					<input name="userMessage" class="leaveMessageTextarea" type="text"/>
 					<div>
 						<span>还可以输入200个字符</span>
 					</div>

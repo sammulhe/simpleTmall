@@ -84,8 +84,7 @@ public class OrderItemDao {
 			ps.setInt(1, orderItem.getNumber());
 			ps.setInt(2, orderItem.getId());
 			ps.executeUpdate();
-			
-			System.out.println("ooo" + orderItem.getNumber());
+
 			connection.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -239,5 +238,22 @@ public class OrderItemDao {
 		}
 		
 		return total;
+	}
+	
+	//生成订单的order id，将它赋值到订单项中的oid
+	public void updateOid(OrderItem orderItem){
+		String sql = "update orderItem set oid = ? where id = ?";
+		try {
+			Connection connection = DBUtil.getConnection();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, orderItem.getOid());
+			ps.setInt(2, orderItem.getId());
+			ps.executeUpdate();
+			
+			connection.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
