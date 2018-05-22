@@ -44,7 +44,7 @@ $(function(){
 	
 	<img id="loginBackgroundImg" class="loginBackgroundImg" src="img/site/loginBackground.png">
 	
-	<form class="loginForm" action="forelogin" method="post">
+	<form class="loginForm" action="login_administrator" method="post">
 		<div id="loginSmallDiv" class="loginSmallDiv">
 			<div class="loginErrorMessageDiv">
 				<div class="alert alert-danger" >
@@ -58,7 +58,7 @@ $(function(){
 				<span class="loginInputIcon ">
 					<span class=" glyphicon glyphicon-user"></span>
 				</span>
-				<input id="name" name="username" placeholder="手机/会员名/邮箱" type="text">			
+				<input id="name" name="name" placeholder="手机/会员名/邮箱" type="text">			
 			</div>
 			
 			<div class="loginInput " >

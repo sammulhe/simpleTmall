@@ -60,6 +60,16 @@
     <url-pattern>/orderServlet</url-pattern>
   </servlet-mapping>
   
+  <servlet>
+    <servlet-name>AdministratorServlet</servlet-name>
+    <servlet-class>servlet.AdministratorServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>AdministratorServlet</servlet-name>
+    <url-pattern>/login_administrator</url-pattern>
+  </servlet-mapping>
+  
+  
   <!--前端servlet的相关操作-->
   <servlet>
     <servlet-name>ForeServlet</servlet-name>

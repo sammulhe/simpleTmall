@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 
+import pojo.Administrator;
 import pojo.User;
 
 
@@ -24,7 +25,7 @@ public class authFilter implements Filter{
 
 	private static String PREFIX = "/fore";
     private static String SERVLET_PATH = "/foreServlet";
-   // private static String BACK ="/admin";  //后台管理员验证
+    private static String BACK ="/admin";  //后台管理员验证
 	 
 	@Override
 	public void destroy() {
@@ -70,11 +71,14 @@ public class authFilter implements Filter{
 	        }
 	    }
 	    
-	    //用于后台的验证，暂时不做
-	    /*
+	    //用于后台的验证	    
 	    if(uri.startsWith(BACK)){
-	    	
-	    }*/
+	    	Administrator admin = (Administrator) request.getSession().getAttribute("admin");
+	    	if(null == admin){
+	    		response.sendRedirect("login_admin.jsp");
+	    		return ;
+	    	}
+	    }
 		
 		chain.doFilter(request, response);
 	}
