@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public class DBUtil {
 	private static final String Class_Name = "org.sqlite.JDBC";
-    private static final String DB_URL = "jdbc:sqlite:D:\\download\\Job\\tmall.db";
+    private static final String DB_URL = "jdbc:sqlite:D:\\download\\Job\\tmall_ssm.db";
 
     static{
         try {
